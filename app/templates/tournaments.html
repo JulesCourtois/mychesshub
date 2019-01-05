@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>All Tournaments</h1>
+    <a href="{{ url_for('create_tournament') }}">Create Tournament</a>
+    <br/>
+    <table>
+        <tr>
+            <th>Federation</th>
+            <th>Name</th>
+            <th>Place</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        {% for tournament in tournaments %}
+            <tr>
+                <td>{{ tournament.federation_initials() }}</td>
+                <td>{{ tournament.name }}</td>
+                <td>{{ tournament.place }}</td>
+                <td>{{ tournament.formatted_date }}</td>
+                <td>{{ current_user.get_registration_status(tournament.id) }}</td>
+            <td>
+                {% if tournament.federation in current_user.get_all_federations() and current_user.get_registration_status(tournament.id) == "" %}
+                    <form action="/join_tournament" method="post">
+                        <button name="join" value="{{ tournament.id }}" type="submit">Join</button>
+                    </form>
+                {% endif %}
+                {% if tournament.organizer == current_user.id %}
+                    <form action="/export" method="post">
+                        <button name="export" value="{{ tournament.id }}" type="submit">Export</button>
+                    </form>
+                {% endif %}
+            </td>
+            </tr>
+        {% endfor %}
+    </table>
+{%  endblock %}

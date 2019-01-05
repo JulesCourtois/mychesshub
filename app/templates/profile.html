@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>{{ current_user.name }}, born {{ current_user.birth_repr() }}</h1>
+    <br/>
+    {{ current_user.email }}
+    <br/>
+    <table>
+        <tr>
+            <th>Federation</th>
+            <th>Player Number</th>
+            <th>Elo</th>
+        </tr>
+        {% for ranking in current_user.rankings %}
+            <tr>
+                <td>{{ ranking.federation_initials() }}</td>
+                <td>{{ ranking.player_id }}</td>
+                <td>{{ ranking.elo }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <br/>
+    <form action="/add_player" method="post">
+        <label>
+            <select name="federation" size="4">
+                {% for federation in federations %}
+                    <option value={{ federation.id }}>{{ federation.initials }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <label>
+            <input name="number" type="text"/>
+        </label>
+        <button name="addFederation" type="submit">Add Player Number</button>
+    </form>
+{%  endblock %}

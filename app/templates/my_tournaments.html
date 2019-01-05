@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>{{ current_user.name }}, these are your tournaments</h1>
+    <br/>
+    <table>
+        <tr>
+            <th>Federation</th>
+            <th>Name</th>
+            <th>Place</th>
+            <th>Date</th>
+            <th>Status</th>
+        </tr>
+        {% for registration in current_user.registrations %}
+            <tr>
+                <td>{{ registration.federation_initials() }}</td>
+                <td>{{ registration.tournament().name }}</td>
+                <td>{{ registration.tournament().place }}</td>
+                <td>{{ registration.tournament().formatted_date }}</td>
+                <td>{{ registration.status }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{%  endblock %}
